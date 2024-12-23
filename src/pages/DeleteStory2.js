@@ -1,7 +1,7 @@
 
 //this component is strictly for handling the visual UI deletion 
 const StoryDelete = ({ postId, onDelete, onCancel , fetchStories}) => {
-    const uRl = `http://localhost:3000/stories/${postId}`;
+    const uRl = `http://localhost:8080/stories/${postId}`;
 
     const handleDelete = async () => {
         try {
@@ -11,9 +11,7 @@ const StoryDelete = ({ postId, onDelete, onCancel , fetchStories}) => {
                 headers: { 'Content-type': 'application/json' }
             });
             
-            //caught data to json
-            const resData = await response.json();
-
+            //if the response is ok, then the post is deleted
             if (response.ok) {
                 onDelete(postId);
             } else {

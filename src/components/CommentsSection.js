@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-const CommentSection = ({ blogId }) => {
+const CommentsSection = ({ blogId }) => {
   const [comments, setComments] = useState([]);  // Initialize as an empty array
   const [newComment, setNewComment] = useState("");
   const [author, setAuthor] = useState("");
+  const [error, setError] = useState(null);
 
   // Fetch comments when blogId changes
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/comments/blog/${blogId}`);
+        const response = await fetch(`http://localhost:8080/comments/blog/${blogId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch comments');
         }
@@ -27,6 +28,7 @@ const CommentSection = ({ blogId }) => {
       } catch (error) {
         console.error('Error fetching comments:', error);
         setComments([]);  // Reset to empty array in case of an error
+        setError("Failed to load comments. Please try again later.");
       }
     };
 
@@ -35,17 +37,24 @@ const CommentSection = ({ blogId }) => {
     }
   }, [blogId]); // Depend on blogId, so fetch again if it changes
 
-  // Handle new comment input change
+  // Handle input changes
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
   };
 
-  const [error, setError] = useState(null);
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value);
+  };
 
   // Handle new comment submission
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
-    if (newComment.trim() === ""|| author.trim() === "") return;
+    setError(null); // Clear any previous errors
+    
+    if (newComment.trim() === "" || author.trim() === "") {
+      setError("Please fill in both name and comment fields.");
+      return;
+    }
 
     const newCommentData = {
       body: newComment,
@@ -54,7 +63,7 @@ const CommentSection = ({ blogId }) => {
     };
    
     try {
-      const response = await fetch(`http://localhost:3000/comments`, {
+      const response = await fetch(`http://localhost:8080/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,11 +79,11 @@ const CommentSection = ({ blogId }) => {
       const savedComment = await response.json();
 
       setComments((prevComments) => [...prevComments, savedComment]);
-      setNewComment("") // reset the comment input
-      setAuthor(""); // reset the comment input
+      setNewComment(""); // reset the comment input
+      setAuthor(""); // reset the author input
     } catch (error) {
       console.error('Error submitting comment:', error);
-      setError("Failed to post comment, please try again.");
+      setError("Failed to post comment. Please try again.");
     }
   };
 
@@ -82,6 +91,13 @@ const CommentSection = ({ blogId }) => {
     <div>
       <div className="comments-section mt-6">
         <h3 className="text-2xl font-bold">Comments</h3>
+
+        {/* Display any errors */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4" role="alert">
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
 
         {/* Render Comments */}
         {Array.isArray(comments) && comments.length > 0 ? (
@@ -101,18 +117,19 @@ const CommentSection = ({ blogId }) => {
         <div className="mt-6">
           <h4 className="text-lg">Add a comment</h4>
           <form onSubmit={handleCommentSubmit}>
+            <input
+              type="text"
+              value={author}
+              onChange={handleAuthorChange}
+              placeholder="Your name"
+              className="w-full p-2 border border-gray-300 rounded-lg mt-2"
+            />
             <textarea
               value={newComment}
               onChange={handleCommentChange}
               placeholder="Write your comment..."
               className="w-full p-2 border border-gray-300 rounded-lg mt-2"
-            />
-            <input
-              type="text"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              placeholder="Your name"
-              className="w-full p-2 border border-gray-300 rounded-lg mt-2"
+              rows="4"
             />
             <button
               type="submit"
@@ -127,4 +144,4 @@ const CommentSection = ({ blogId }) => {
   );
 };
 
-export default CommentSection;
+export default CommentsSection;

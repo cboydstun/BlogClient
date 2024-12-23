@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
 import CommentSection from '../components/CommentsSection';
-
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -15,7 +13,7 @@ const BlogPage = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetch('http://localhost:3000/blog/blogs');
+      const response = await fetch('http://localhost:8080/blog/blogs');
       if (!response.ok) {
         throw new Error('Failed to fetch blogs');
       }
@@ -80,7 +78,7 @@ const BlogPage = () => {
           </div>
         ) : (
           <div className="flex flex-wrap justify-center gap-8">
-           <h1 className="text-3xl font-bold text-center mb-5"></h1>
+           <h1 className="text-3xl font-bold text-center mb-5">Blogs</h1>
 
             {blogs.map((blog) => (
               <div

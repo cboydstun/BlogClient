@@ -6,7 +6,7 @@ const BlogListButton = () => {
 
     const handleFetchBlogs = async () => {
         try {
-            const response = await fetch('http://localhost:3000/blog/blogs', {
+            const response = await fetch('http://localhost:8080/blog/blogs', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

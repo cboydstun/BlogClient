@@ -20,7 +20,7 @@ const StorySubmit = async (
   try {
     console.log("Submitting story:", { title, content, description });
     //created const for fetch and await
-    const response = await fetch("http://localhost:3000/stories", {
+    const response = await fetch("http://localhost:8080/stories", {
       method: "POST",
       headers: {
         "Content-type": "application/json",

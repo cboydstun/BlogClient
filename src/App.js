@@ -1,60 +1,49 @@
 import "./App.css";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 
-// Imports of pages and components
+// Layout
 import AppLayout from "./appLayout/AppLayout";
-import Profile from "./pages/Profile";
-import AboutPage from "./pages/AboutPage";
-import Login from "./components/Login";
-import StoryPage from "./pages/storypage.js";
-import ScrollToTop from "./components/ScrollToTop";
-import BlogListButton from "./components/BlogListButton"; // Make sure this path matches your file structure
-import BlogList from "./pages/BlogList";
-import StoryCreation from "./components/StoryCreation.js";
+
+// Pages
 import HomePage from "./pages/Home";
-import AdminReviewComment from './pages/AdminReviewComment';
+import AboutPage from "./pages/AboutPage";
 import BlogPage from "./pages/BlogPage";
+import BlogList from "./pages/BlogList";
+import Profile from "./pages/Profile";
+import StoryPage from "./pages/storypage.js";
 import EventsPage from "./pages/Events.js";
-import storyReview from "./components/AdminReviews"
-import ProtectedRoute from "./components/ProtectedRoute.js";// Component to protect admin routes
+import AdminReviewComment from './pages/AdminReviewComment';
+
+// Components
+import Login from "./components/Login";
+import StoryCreation from "./components/StoryCreation.js";
 import StoryList from "./components/StoryList.js";
+import ProtectedRoute from "./components/ProtectedRoute.js";
 
-const router = createBrowserRouter(createRoutesFromElements(
-  <Route path="/" element={<AppLayout />}>
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<AppLayout />}>
+      {/* Public Routes */}
+      <Route index element={<HomePage />} />
+      <Route path="about" element={<AboutPage />} />
+      <Route path="login" element={<Login />} />
+      <Route path="blogPage" element={<BlogPage />} />
+      <Route path="events" element={<EventsPage />} />
+      <Route path="storyPage" element={<StoryPage />} />
 
+      {/* Protected Routes */}
+      <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="blogList" element={<ProtectedRoute><BlogList /></ProtectedRoute>} />
+      <Route path="blogCreation" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="storylist" element={<ProtectedRoute><StoryList /></ProtectedRoute>} />
+      <Route path="storycreation" element={<ProtectedRoute><StoryCreation /></ProtectedRoute>} />
+      <Route path="adminReviewComment" element={<ProtectedRoute><AdminReviewComment /></ProtectedRoute>} />
+    </Route>
+  )
+);
 
-    <Route path="/blogList" element={<ProtectedRoute ><BlogList /></ProtectedRoute>} />   
-    <Route path="/blogCreation" element={<ProtectedRoute ><Profile /> </ProtectedRoute>} />
-    <Route path="/" element={<HomePage />} />
-    <Route path="/blogPage" element={<BlogPage />} />
-    <Route path="/about" element={<AboutPage />} />
-    <Route path="/login" element={<Login />}/>
-    <Route path="/storylist" element={<ProtectedRoute ><StoryList /></ProtectedRoute>}/>
-      <Route path="/events" element={<EventsPage />} />
-    <Route path="/profile" element={<ProtectedRoute ><Profile /> </ProtectedRoute>} />
-    <Route path="/storycreation" element={<StoryCreation />}/>
-    <Route path="/adminReviewComment" element={<ProtectedRoute ><AdminReviewComment /></ProtectedRoute>} />
-    <Route path="/storyPage" element={<StoryPage />} />
-    
-
-
-  </Route>
-));
-
-
-
-function App() {
-  return (
-    <RouterProvider router={router}>
-      {/* ScrollToTop should be here to listen for route changes */}
-      <ScrollToTop />
-    </RouterProvider>
-  );
-}
+const App = () => {
+  return <RouterProvider router={router} />;
+};
 
 export default App;

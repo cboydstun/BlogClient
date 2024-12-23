@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2, X, Check, Plus } from 'lucide-react';
 
+// Reusable style classes
+const sectionClasses = "w-full max-w-4xl bg-white/95 p-8 mb-12 rounded-lg shadow-lg transition-all duration-300 ease-in-out border-2 border-yellow-900 relative hover:shadow-2xl";
+const gradientBorderClasses = "absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-900 via-orange-300 to-yellow-900";
+const headingClasses = "text-4xl font-serif font-bold text-center mb-8 text-yellow-950 relative";
+
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -10,7 +15,7 @@ const BlogList = () => {
 
   const handleFetchBlogs = async () => {
     try {
-      const response = await fetch('http://localhost:3000/blog/blogs', {
+      const response = await fetch('http://localhost:8080/blog/blogs', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +41,7 @@ const BlogList = () => {
   const handleSave = async () => {
     if (editedBlog.title && editedBlog.content) {
       try {
-        const response = await fetch(`http://localhost:3000/blog/blogs/${editingId}`, {
+        const response = await fetch(`http://localhost:8080/blog/blogs/${editingId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -47,8 +52,6 @@ const BlogList = () => {
         if (!response.ok) {
           throw new Error('Failed to update blog');
         }
-
-        const updatedBlog = await response.json();
         
         setBlogs(blogs.map(blog => 
           blog._id === editingId 
@@ -67,7 +70,7 @@ const BlogList = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/blog/blogs/${id}`, {
+      const response = await fetch(`http://localhost:8080/blog/blogs/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +91,7 @@ const BlogList = () => {
   const handleAdd = async () => {
     if (newBlog.title && newBlog.content) {
       try {
-        const response = await fetch('http://localhost:3000/blog/blogs', {
+        const response = await fetch('http://localhost:8080/blog/blogs', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -114,89 +117,93 @@ const BlogList = () => {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-yellow-800">Blog Posts</h1>
-        <button
-
-          onClick={handleFetchBlogs} // Fetch blogs on button click
-          className="flex flex-col items-center bg-gradient-to-r from-orange-100 via-orange-200 to-orange-100 p-6 "
-
-        >
-          Show Blogs
-        </button>
-        {!isAddingNew && (
-          <button
-            onClick={() => setIsAddingNew(true)}
-            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            <Plus size={16} /> Add New Post
-          </button>
-        )}
-      </div>
-
-      {isAddingNew && (
-        <div className="border-2 rounded-lg p-4 bg-yellow-50 border-yellow-200 shadow-md mb-4">
-          <input
-            type="text"
-            value={newBlog.title}
-            onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
-            placeholder="Enter title"
-            className="w-full mb-2 p-2 border rounded"
-          />
-          <textarea
-            value={newBlog.content}
-            onChange={(e) => setNewBlog({ ...newBlog, content: e.target.value })}
-            placeholder="Enter content"
-            className="w-full mb-2 p-2 border rounded"
-            rows="3"
-          />
-          <div className="flex justify-end gap-2">
+    <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-orange-50 to-orange-100 p-6 transition-all duration-1000">
+      <section className={sectionClasses}>
+        <div className={gradientBorderClasses}></div>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className={headingClasses}>Blog Posts</h1>
+          <div className="flex gap-4">
             <button
-              onClick={() => setIsAddingNew(false)}
-              className="flex items-center gap-1 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+              onClick={handleFetchBlogs}
+              className="px-6 py-3 bg-yellow-950 text-white font-serif tracking-wide rounded-md hover:bg-yellow-800 transition-all duration-300 shadow-lg transform hover:-translate-y-1 hover:shadow-xl"
             >
-              <X size={16} /> Cancel
+              Show Blogs
             </button>
-            <button
-              onClick={handleAdd}
-              className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-            >
-              <Check size={16} /> Save
-            </button>
+            {!isAddingNew && (
+              <button
+                onClick={() => setIsAddingNew(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-yellow-950 text-white font-serif tracking-wide rounded-md hover:bg-yellow-800 transition-all duration-300 shadow-lg transform hover:-translate-y-1 hover:shadow-xl"
+              >
+                <Plus size={16} /> Add New Post
+              </button>
+            )}
           </div>
         </div>
-      )}
 
-      {blogs.map((blog) => (
-        <div
-          key={blog._id}
-          className="border-2 rounded-lg p-4 bg-yellow-50 border-yellow-200 shadow-md transition hover:shadow-lg"
-        >
+        {isAddingNew && (
+          <div className="w-full bg-white/95 p-6 rounded-lg shadow-lg border-2 border-yellow-900 mb-8 relative group">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-900 via-orange-300 to-yellow-900 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            <input
+              type="text"
+              value={newBlog.title}
+              onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
+              placeholder="Enter title"
+              className="w-full mb-4 p-3 border-2 border-yellow-900/20 rounded-md font-serif text-lg focus:border-yellow-900 focus:ring-2 focus:ring-yellow-900/20 transition-all duration-300"
+            />
+            <textarea
+              value={newBlog.content}
+              onChange={(e) => setNewBlog({ ...newBlog, content: e.target.value })}
+              placeholder="Enter content"
+              className="w-full mb-4 p-3 border-2 border-yellow-900/20 rounded-md font-serif text-lg focus:border-yellow-900 focus:ring-2 focus:ring-yellow-900/20 transition-all duration-300"
+              rows="4"
+            />
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setIsAddingNew(false)}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white font-serif tracking-wide rounded-md hover:bg-gray-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              >
+                <X size={16} /> Cancel
+              </button>
+              <button
+                onClick={handleAdd}
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-950 text-white font-serif tracking-wide rounded-md hover:bg-yellow-800 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              >
+                <Check size={16} /> Save
+              </button>
+            </div>
+          </div>
+        )}
+
+        {blogs.map((blog) => (
+          <div
+            key={blog._id}
+            className="w-full bg-white/95 p-6 rounded-lg shadow-lg border-2 border-yellow-900 mb-6 relative group transform hover:scale-[1.02] transition-all duration-300"
+          >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-900 via-orange-300 to-yellow-900 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
           {editingId === blog._id ? (
             <>
               <input
                 type="text"
                 value={editedBlog.title}
                 onChange={(e) => setEditedBlog({ ...editedBlog, title: e.target.value })}
-                className="w-full mb-2 p-2 border rounded text-xl font-semibold"
+                className="w-full mb-4 p-3 border-2 border-yellow-900/20 rounded-md font-serif text-xl font-semibold focus:border-yellow-900 focus:ring-2 focus:ring-yellow-900/20 transition-all duration-300"
               />
               <textarea
                 value={editedBlog.content}
                 onChange={(e) => setEditedBlog({ ...editedBlog, content: e.target.value })}
-                className="w-full mb-2 p-2 border rounded"
-                rows="3"
+                className="w-full mb-4 p-3 border-2 border-yellow-900/20 rounded-md font-serif text-lg focus:border-yellow-900 focus:ring-2 focus:ring-yellow-900/20 transition-all duration-300"
+                rows="4"
               />
-              <div className="flex justify-end gap-2">
+              <div className="flex justify-end gap-4">
                 <button
                   onClick={() => setEditingId(null)}
-                  className="flex items-center gap-1 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white font-serif tracking-wide rounded-md hover:bg-gray-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
                   <X size={16} /> Cancel
                 </button>
                 <button
                   onClick={handleSave}
-                  className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                  className="flex items-center gap-2 px-4 py-2 bg-yellow-950 text-white font-serif tracking-wide rounded-md hover:bg-yellow-800 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
                   <Check size={16} /> Save
                 </button>
@@ -204,30 +211,30 @@ const BlogList = () => {
             </>
           ) : (
             <>
-              <div className="flex justify-between items-start">
-                <h2 className="text-xl font-semibold text-yellow-800 mb-2">{blog.title}</h2>
-                <div className="flex gap-2">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-serif font-bold text-yellow-950">{blog.title}</h2>
+                <div className="flex gap-3">
                   <button
                     onClick={() => handleEdit(blog)}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-yellow-950 hover:text-yellow-800 transition-all duration-300 transform hover:scale-110"
                   >
-                    <Pencil size={16} />
+                    <Pencil size={20} />
                   </button>
                   <button
                     onClick={() => handleDelete(blog._id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-yellow-950 hover:text-yellow-800 transition-all duration-300 transform hover:scale-110"
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={20} />
                   </button>
                 </div>
               </div>
-              <p className="text-yellow-700">{blog.content}</p>
+              <p className="text-gray-800 font-serif text-lg leading-relaxed">{blog.content}</p>
             </>
           )}
-        </div>
-      ))}
+          </div>
+        ))}
+      </section>
     </div>
   );
 };
-
 export default BlogList;

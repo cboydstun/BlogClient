@@ -22,7 +22,7 @@ const EventCreation = () => {
         .find((row) => row.startsWith("token="))
         .split("=")[1];
 
-      const response = await fetch("http://localhost:3000/events/create", {
+      const response = await fetch("http://localhost:8080/events/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,6 @@ const EventCreation = () => {
       if (!response.ok) {
         throw new Error("failed to create event");
       }
-      const result = await response.json();
       setSuccess("Event Created");
       setDate("");
       setLocation("");

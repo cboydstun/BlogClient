@@ -1,38 +1,56 @@
-// AboutPage.js
-// This component displays an about section for Mike.N, 
-// highlighting Mike's background and love for storytelling.
-// It includes a title, a placeholder image, and a descriptive paragraph.
-// The layout is styled using Tailwind CSS for a responsive and visually appealing design.
-
-// AboutPage.js
 import React from 'react';
+import clientImage from '../assets/MikeN.png';
 
-import clientImage from '../assets/MikeN.png'; 
-
+// Reusable style classes
+const sectionClasses =
+  "w-full max-w-4xl bg-white/95 p-8 mb-12 rounded-lg shadow-lg transition-all duration-300 ease-in-out border-2 border-yellow-900 relative hover:shadow-2xl";
+const gradientBorderClasses =
+  "absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-900 via-orange-300 to-yellow-900";
+const headingClasses =
+  "text-4xl font-serif font-bold text-center mb-8 text-yellow-950 relative";
 
 const AboutPage = () => {
-    return (
-           
-           <div className="flex flex-col items-center min-h-screen  bg-gradient-to-r from-orange-100 via-orange-200 to-orange-100 p-6 transition-all duration-1000">
+  return (
+    <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-orange-50 to-orange-100 p-6 transition-all duration-1000">
+      <section className={sectionClasses}>
+        <div className={gradientBorderClasses}></div>
+        <h1 className={headingClasses}>
+          <span className="absolute -left-4 -top-1 text-6xl text-orange-300 opacity-20">
+            ❝
+          </span>
+          About Mike.N
+          <span className="absolute -right-4 -bottom-1 text-6xl text-orange-300 opacity-20">
+            ❞
+          </span>
+        </h1>
 
-                <h1 className=" font-serif text-6xl font-thin mb-10 ">About Mike.N </h1>
-                {/*Display client image*/}
-              <img
-             src={clientImage}
-             alt="client provided image" 
-             className=" w-64 h-64  object-cover shadow-lg mb-10" // Tailwind classes for styling
-             /> 
-                
-        <p className=" font-serif text-lg text-gray-700 leading-relaxed text-center mx-3 p-3 rounded-lg shadow-md">
+        <div className="flex flex-col items-center">
+          <div className="relative mb-8 group">
+            <div className="absolute inset-0 border-4 border-yellow-900 rounded-full transform rotate-6 group-hover:rotate-0 transition-all duration-500"></div>
+            <img
+              src={clientImage}
+              alt="Mike Ninnes"
+              className="relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-full border-4 border-white shadow-lg object-cover transform group-hover:scale-105 transition-all duration-500"
+            />
+          </div>
 
-        Mike is a husband, father, grandfather and retired Air Force member from Washington, Missouri. Mike grew up loving westerns and SF, including: The Lone Ranger, Fury, Wanted Dead or Alive, The Virginian, Star Trek, The Time Tunnel, The Outer Limits, The Twilight Zone, and One Step Beyond. Mike’s love of storytelling began in early childhood when he told his older brother bedtime adventures. Maryville University chose his short story, Laughter and Tears - A Story about Virginia Berning for publication by the university's literary book Magnolia. In 2017, he and his son helped start Washington Wordsmiths, a writer’s group in the Washington Public Library. His short story, Family, was included in the first Wordsmiths’ anthology, The Bridges Between Us, independently published in June, 2019.
-
-
-        </p>
-   
-</div>
-    )
-}
-
+          <div className="prose prose-lg max-w-none">
+            <p className="text-xl font-serif text-gray-700 leading-relaxed text-center mb-6">
+              Mike is a husband, father, grandfather and retired Air Force member from Washington, Missouri. Mike grew up loving westerns and SF, including: The Lone Ranger, Fury, Wanted Dead or Alive, The Virginian, Star Trek, The Time Tunnel, The Outer Limits, The Twilight Zone, and One Step Beyond.
+            </p>
+            
+            <p className="text-xl font-serif text-gray-700 leading-relaxed text-center mb-6">
+              Mike's love of storytelling began in early childhood when he told his older brother bedtime adventures. Maryville University chose his short story, Laughter and Tears - A Story about Virginia Berning for publication by the university's literary book Magnolia.
+            </p>
+            
+            <p className="text-xl font-serif text-gray-700 leading-relaxed text-center">
+              In 2017, he and his son helped start Washington Wordsmiths, a writer's group in the Washington Public Library. His short story, Family, was included in the first Wordsmiths' anthology, The Bridges Between Us, independently published in June, 2019.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
 
 export default AboutPage;
